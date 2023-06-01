@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Mapperとxmlのマッピング -->
+<mapper namespace="com.example.demo.repository.EcMapper">
+
+  <!-- マッピング定義(ユーザー) -->
+  <resultMap type="com.example.demo.domain.model.MUser" id="user">
+    <id column="user_id" property="userId" />
+    <result column="password" property="password" />
+    <result column="email" property="email" />
+    <result column="name" property="name" />
+    <result column="date_of_birth" property="dateOfBirth" />
+    <result column="zip_code" property="zipCode" />
+    <result column="address" property="address" />
+    <result column="role_name" property="roleName" />
+  </resultMap>
+  
+  <!-- マッピング定義(商品) -->
+  <resultMap type="com.example.demo.domain.model.MGoods" id="goods">
+    <id column="goods_id" property="goodsId" />
+    <result column="goods_name" property="goodsName" />
+    <result column="price" property="price" />
+    <result column="quantity" property="quantity" />
+    <result column="goods_image" property="goodsImage" />
+    <result column="goods_explanation" property="goodsExplanation" />
+  </resultMap>
+  
+    <!-- マッピング定義(購入履歴) -->
+  <resultMap type="com.example.demo.domain.model.MHistory" id="history">
+  	<id column="purchase_id" property="purchaseId" />
+    <result column="goods_id" property="goodsId" />
+    <result column="user_id" property="userId" />
+    <result column="goods_name" property="goodsName" />
+    <result column="goods_image" property="goodsImage" />
+    <result column="quantity" property="quantity" />
+    <result column="purchase_date" property="purchaseDate" />
+    <result column="price" property="price" />
+  </resultMap>
+  
+  <!-- マッピング定義(請求先) -->
+  <resultMap type="com.example.demo.domain.model.MBilling" id="billing">
+    <id column="user_id" property="userId" />
+    <result column="billing_name" property="billingName" />
+    <result column="billing_zip_code" property="billingZipCode" />
+    <result column="billing_address" property="billingAddress" />
+    <result column="billing_number" property="billingNumber" />
+  </resultMap>
+  
+    <!-- ログインユーザー情報取得 -->
+  <select id="findLoginUser" resultType="MUser">
+    select
+        user_info.user_id
+      , user_info.password
+      , roles.name AS role_name
+    from
+      user_info
+      inner join user_role
+        on user_info.user_id = user_role.user_id
+      inner join roles
+        on user_role.role_id = roles.id
+    where
+      user_info.user_id = #{userId}
+  </select>
+  
+  <!-- ユーザー全件検索 -->
+  <select id="findAll" resultMap="user">
+    select
+        user_id
+      , password
+      , email
+      , name
+      , date_of_birth
+      , zip_code
+      , address
+    from
+      user_info
+  </select>
+  
+  <!-- ユーザー1件検索 -->
+  <select id="findOne" resultMap="user">
+    select
+        user_id
+      , password
+      , email
+      , name
+      , date_of_birth
+      , zip_code
+      , address
+    from
+      user_info
+    where
+      user_id = #{userId}
+  </select>
+  
+  <!-- ユーザー1件登録 -->
+  <insert id="insertOne">
+    insert into user_info(
+        user_id
+      , password
+      , email
+      , name
+      , date_of_birth
+      , zip_code
+      , address
+      , del_flg
+      , create_div
+      , create_date
+      , create_id
+      , update_date
+      , update_id
+    )
+    values (
+        #{userId}
+      , #{password}
+      , #{email}
+      , #{name}
+      , #{dateOfBirth}
+      , #{zipCode}
+      , #{address}
+      , '0'
+      , 'C'
+      , NOW()
+      , #{userId}
+      , NOW()
+      , #{userId}
+    )
+  </insert>
+  
+  <!-- ユーザー1件更新 -->
+  <update id="updateOne">
+    update
+      user_info
+    set
+        user_id = #{userId}
+      , password = #{password}
+      , email = #{email}
+      , name = #{name}
+      , date_of_birth = #{dateOfBirth}
+      , zip_code = #{zipCode}
+      , address = #{address}
+      , create_div = 'U'
+      , update_date = NOW()
+      , update_id = #{userId}    
+    where
+      user_id = #{userId}
+  </update>
+  
+  <!-- ユーザー1件登録 -->
+  <insert id="insertUserRoleOne">
+    insert into user_role(
+        user_id
+      , role_id
+    )
+    values (
+        #{userId}
+      , '1'
+    )
+  </insert>
+
+  <!-- 商品全件検索 -->
+  <select id="findGoodsMany" resultType="MGoods">
+    select
+        goods_id
+      , goods_name
+      , price
+      , quantity
+      , goods_image
+      , goods_explanation
+    from
+      goods_info
+    where  
+      del_flg = '0'
+  </select>
+  
+  <!-- 商品1件検索 -->
+  <select id="findGoodsOne" resultType="MGoods">
+    select
+        goods_id
+      , goods_name
+      , price
+      , quantity
+      , goods_image
+      , goods_explanation
+    from
+      goods_info
+    where
+      goods_id = #{goodsId}
+  </select>
+  
+  <!-- 商品1件登録 -->
+  <insert id="insertGoodsOne">
+    insert into goods_info(
+        goods_id
+      , goods_name
+      , price
+      , quantity
+      , goods_image
+      , goods_explanation
+      , del_flg
+      , create_div
+      , create_date
+      , create_id
+      , update_date
+      , update_id
+    )
+    values (
+        #{goodsId}
+      , #{goodsName}
+      , #{price}
+      , #{quantity}
+      , #{goodsImage}
+      , #{goodsExplanation}
+      , '0'
+      , 'C'
+      , NOW()
+      , #{userId}
+      , NOW()
+      , #{userId}
+    )
+  </insert>
+  
+  <!-- 商品1件更新 -->
+  <update id="updateGoodsOne">
+    update
+      goods_info
+    set
+        goods_id = #{goodsId}
+      , goods_name = #{goodsName}
+      , price = #{price}
+      , quantity = #{quantity}
+      , goods_image = #{goodsImage}
+      , goods_explanation = #{goodsExplanation}
+      , create_div = 'U'
+      , update_date = NOW()
+      , update_id = #{userId}    
+    where
+      goods_id = #{goodsId}
+  </update>
+  
+  <!-- 商品1件削除 -->
+  <update id="deleteGoodsOne">
+    update
+      goods_info
+    set
+        del_flg = '1',
+        create_div = 'D',
+        update_date = NOW(),
+        update_id = #{userId}
+    where
+      goods_id = #{goodsId}
+  </update>
+  
+  <!-- 購入履歴全件検索 -->
+  <select id="findHistoryMany" resultMap="history">
+    select
+        purchase_history.purchase_id
+      , purchase_history.goods_id
+      , purchase_history.user_id
+      , goods_info.goods_name
+      , goods_info.goods_image
+      , purchase_history.quantity
+      , purchase_history.purchase_date
+      , purchase_history.price
+    from
+      purchase_history
+      inner join goods_info
+        on purchase_history.goods_id = goods_info.goods_id
+    <where>
+    	<if test="userId != null">
+      	  purchase_history.user_id = #{userId}
+    	</if>
+    </where>
+  </select>
+  
+  <!-- 購入履歴1件登録 -->
+  <insert id="insertHistoryOne">
+    insert into purchase_history(
+        purchase_id
+      , goods_id
+      , user_id
+      , quantity
+      , purchase_date
+      , price
+      , del_flg
+      , create_div
+      , create_date
+      , create_id
+      , update_date
+      , update_id
+    )
+    values (
+        #{purchaseId}
+      , #{goodsId}
+      , #{userId}
+      , #{quantity}
+      , #{purchaseDate}
+      , #{price}
+      , '0'
+      , 'C'
+      , NOW()
+      , #{userId}
+      , NOW()
+      , #{userId}
+    )
+  </insert>
+  
+  <!-- 請求先1件検索 -->
+  <select id="findBillingOne" resultMap="billing">
+    select
+        user_id
+      , billing_name
+      , billing_zip_code
+      , billing_address
+      , billing_number
+    from
+      billing_address
+    where
+      user_id = #{userId}
+  </select>
+  
+  <!-- 請求先1件登録 -->
+  <insert id="insertBillingOne">
+    insert into billing_address(
+        user_id
+      , billing_name
+      , billing_zip_code
+      , billing_address
+      , billing_number
+      , del_flg
+      , create_div
+      , create_date
+      , create_id
+      , update_date
+      , update_id
+    )
+    values (
+        #{userId}
+      , #{billingName}
+      , #{billingZipCode}
+      , #{billingAddress}
+      , #{billingNumber}
+      , '0'
+      , 'C'
+      , NOW()
+      , #{userId}
+      , NOW()
+      , #{userId}
+    )
+  </insert>
+  
+  <!-- 請求先1件更新 -->
+  <update id="updateBillingOne">
+    update
+      billing_address
+    set
+        user_id = #{userId}
+      , billing_name = #{billingName}
+      , billing_zip_code = #{billingZipCode}
+      , billing_address = #{billingAddress}
+      , billing_number = #{billingNumber}
+      , create_div = 'U'
+      , update_date = NOW()
+      , update_id = #{userId}  
+    where
+      user_id = #{userId}
+  </update>
+  
+</mapper>

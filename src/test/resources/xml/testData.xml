@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dataset>
+    <user_info user_id="test" 
+                password="$2a$10$5dQTDVAJHtr5UBV33mEro..1D77BhjTjxBMIV8b6xoKAsiieGXwrS"
+                email="test@sample.com"
+                name="test"
+                date_of_birth="2013-12-21"
+                zip_code="101-0001"
+                address="東京都千代田区千代田1番1号" />
+    <billing_address user_id="test" 
+                      billing_name="test@sample.com"
+                      billing_zip_code="555-5555"
+                      billing_address="大阪府吹田市山手町３丁目３−３５"
+                      billing_number="072-990-0000" />
+    <purchase_history purchase_id="test20230111153600" 
+                       goods_id="cart5"
+                       user_id="test"
+                       quantity="1"
+                       purchase_date="2013-04-11" 
+                       price="2000" />
+    <goods_info goods_id="cart20"
+                 goods_name="サーバー"
+                 price="20000"
+                 quantity="100"
+                 goods_image="image/Server20.jpg" 
+                 goods_explanation="高性能サーバーです。" />    
+</dataset>
