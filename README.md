@@ -44,5 +44,3 @@ Seleniumによる、Chrome、Edge、Firefoxでの自動テストを実現。
 Seleniumを使用してUIテストを実行している。
 
 https://github.com/b-forme-tomonari/EC_System/assets/106940016/3b874147-d6c9-409f-8741-4b2926e0a345
-
-
