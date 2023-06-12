@@ -17,7 +17,7 @@ Spring BootとThymeleafを使用したECサイトです。
 |:--|:--|
 | プログラミング言語 | Java（ver:11）、JavaScript　|
 | フレームワーク | SpringBoot（ver:2.7.6）、MyBatis（ver:3.5.2）、Bootstrap（ver:5.2.3）|
-| フロントエンド | HTML、CSS、jQuery（ver:3.3.1）、hymeleaf、Chart.js　|
+| フロントエンド | HTML、CSS、jQuery（ver:3.3.1）、Thymeleaf、Chart.js　|
 | データベース | MySQL（ver:8.0.29）、Redis（ver:3.0.504）|
 | インフラ | Tomcat（ver:8.5.87）、Apache Http Server（ver:2.4.55）|
 | テスト | JUnit、DBUnit（ver:2.7.3）、Selenium（ver:4.8.1）、Apache POI（ver:5.1.0）|
